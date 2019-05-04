@@ -67,4 +67,3 @@ print('Po scramblingu: ' + ''.join(informal_scrambled))
 descrambling(scrambler_output)
 informal_descrambled = [str(i) for i in descrambler_output]
 print('Po descramblingu: ' + ''.join(informal_descrambled))
-
