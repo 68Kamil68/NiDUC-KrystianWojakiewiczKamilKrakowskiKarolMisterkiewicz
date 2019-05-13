@@ -5,10 +5,21 @@ sync = []
 scrambler_output = []
 descrambler_output = []
 first_sync = []
-size_of_bitmap = 50
-# Definicja sumy XOR
+raw_binary = []
 
 
+# wczytanie bitmapy z pliku i wprowadzenie wartosci pixeli do tablicy
+im = Image.open(input('wprowadz nazwe pliku z bitmapa: '))
+size_of_bitmap = im.size[0]
+pixels = im.load()
+for i in range(size_of_bitmap):
+    for j in range(size_of_bitmap):
+        raw_binary.append(pixels[i, j])
+
+im.show(title='Przed  scramblingiem')  # wyswietlenie bitmapy wejsciowej
+
+
+# definicja sumy xor
 def xor(a, b):
     if int(a) - int(b) == 0:
         return 0
@@ -27,10 +38,6 @@ def fill_sync(tab, tab2):
 fill_sync(sync, first_sync)
 informal_sync = [str(i) for i in sync]
 # print('\nCiag losowy SYNC: ' + ''.join(informal_sync))
-
-# Pobranie słowa z pliku
-raw_binary = [random.randint(0, 1) for i in range(size_of_bitmap*size_of_bitmap)]
-# print("Przed scramblingiem: " + str(raw_binary))
 
 # funkcja scramblujaca
 
@@ -68,21 +75,17 @@ descrambled = descrambling(scramblud)
 informal_descrambled = [str(i) for i in descrambled]
 # print('Po descramblingu: ' + ''.join(informal_descrambled))
 
-# wypelnienie obrazka sygnalem wejsciowym przed scramblingiem
-img1 = Image.new('1', (size_of_bitmap, size_of_bitmap))  
-pixels1 = img1.load()  # Create the pixel map
+# stworzenie nowych obiektow klasy Image 
 img2 = Image.new('1', (size_of_bitmap, size_of_bitmap)) 
 pixels2 = img2.load()
 img3 = Image.new('1', (size_of_bitmap, size_of_bitmap))
 pixels3 = img3.load()
 
-for i in range(img1.size[0]):    # For every pixel:
-    for j in range(img1.size[1]):
-        pixels1[i, j] = raw_binary[size_of_bitmap*i + j]
+for i in range(im.size[0]):    # For every pixel:
+    for j in range(im.size[1]):
         pixels2[i, j] = scramblud[size_of_bitmap*i + j]
         pixels3[i, j] = descrambled[size_of_bitmap*i + j]
 
 # displaying bitmap
-img1.show(title='Przed  scramblingiem')
 img2.show(title='Po scramblingu')
 img3.show(title='Po rescramblingu')

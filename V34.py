@@ -4,7 +4,8 @@ scrambler_output = []
 descrambler_output = []
 first_sync = []
 
-#Definicja sumy XOR
+
+# Definicja sumy XOR
 def xor(a, b):
     if int(a) - int(b) == 0:
         return 0
@@ -12,7 +13,7 @@ def xor(a, b):
         return 1
 
 
-#Tworzenie sync/poczatkowe 23 pseudolosowych bitow w scramblerze
+# Tworzenie sync/poczatkowe 23 pseudolosowych bitow w scramblerze
 def fill_sync(tab, tab2):
     for i in range(23):
         tab.append(random.randint(0, 1))
@@ -22,17 +23,17 @@ def fill_sync(tab, tab2):
 
 
 
-#wypełnienie scramblera i wypisanie poczatkowych liczb pseudolosowych
+# wypełnienie scramblera i wypisanie poczatkowych liczb pseudolosowych
 fill_sync(sync, first_sync)
 informal_sync = [str(i) for i in sync]
 print('\nCiag losowy SYNC: ' + ''.join(informal_sync))
 
-#Pobranie słowa z pliku
+# Pobranie słowa z pliku
 raw_binary = open('bintext.txt', 'r').read()
 print("Przed scramblingiem: " + raw_binary)
 
 
-#funkcja scramblujaca
+# funkcja scramblujaca
 def scrambling(tab):
     for i in range(len(tab)):
         temp = len(sync)
@@ -44,7 +45,7 @@ def scrambling(tab):
     return scrambler_output
 
 
-#funkcja descramblujaca
+# funkcja descramblujaca
 def descrambling(tab):
     for i in range(len(tab)):
         temp = len(first_sync)
@@ -56,14 +57,13 @@ def descrambling(tab):
     return scrambler_output
 
 
-#wykonanie scramblingu i wpisanie efektow
+# wykonanie scramblingu i wpisanie efektow
 scrambling(raw_binary)
 informal_scrambled = [str(i) for i in scrambler_output]
 print('Po scramblingu: ' + ''.join(informal_scrambled))
 
 
-
-#wykonanie descramblingu i wpisanie efektow
+# wykonanie descramblingu i wpisanie efektow
 descrambling(scrambler_output)
 informal_descrambled = [str(i) for i in descrambler_output]
 print('Po descramblingu: ' + ''.join(informal_descrambled))
