@@ -12,8 +12,8 @@ raw_binary = []
 im = Image.open(input('wprowadz nazwe pliku z bitmapa: '))
 size_of_bitmap = im.size[0]
 pixels = im.load()
-for i in range(size_of_bitmap):
-    for j in range(size_of_bitmap):
+for i in range(im.size[0]):
+    for j in range(im.size[1]):
         raw_binary.append(pixels[i, j])
 
 im.show(title='Przed  scramblingiem')  # wyswietlenie bitmapy wejsciowej
