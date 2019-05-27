@@ -12,27 +12,35 @@ def xor(a, b):
         return 1
 
 class ScramblerDVB:
-    def __init__(self, size_of_bitmap, raw_binary):
+    def __init__(self, size_of_bitmap, raw_binary, label):
         self.sync = []
         self.scrambler_output = []
         self.descrambler_output = []
         self.first_sync = []
         self.raw_binary = raw_binary
         self.size_of_bitmap = size_of_bitmap
-        self.initialze_scrambler()
+        self.SYNC_LENGTH = 15
+
+        self.initialize_scrambler(label)
 
 
     # wypełnienie scramblera i wypisanie poczatkowych liczb pseudolosowych
-    def initialze_scrambler(self):
+    def initialize_scrambler(self, label):
         self.fill_sync()
-        informal_sync = [str(i) for i in self.sync]
-        # print('\nCiag losowy SYNC: ' + ''.join(informal_sync))
+        self.showInitialSeqInGUI(label)
 
     # Tworzenie sync/poczatkowe 15 pseudolosowych bitow w scramblerze
     def fill_sync(self):
-        for i in range(self.size_of_bitmap * self.size_of_bitmap):
-            self.sync.append(random.randint(0, 1))
-            self.first_sync.append(self.sync[i])
+        for i in range(self.SYNC_LENGTH):
+            newRandom = random.randint(0, 1)
+            self.sync.append(newRandom)
+            self.first_sync.append(newRandom)
+
+    # shows the first pseudo-random number seq
+    def showInitialSeqInGUI(self, label):
+        informal_sync = [str(i) for i in self.sync]
+        label.append('\nInitial pseudo-random seq SYNC:    ' + ''.join(informal_sync))
+
 
     # funkcja scramblujaca
     def scramble(self):

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>972</width>
+    <height>597</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -57,12 +57,12 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>411</width>
-     <height>301</height>
+     <width>981</width>
+     <height>601</height>
     </rect>
    </property>
    <property name="currentIndex">
-    <number>2</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="tabDVB">
     <attribute name="title">
@@ -71,40 +71,118 @@
     <widget class="QPushButton" name="scrambleBtnDVB">
      <property name="geometry">
       <rect>
-       <x>40</x>
-       <y>170</y>
-       <width>93</width>
-       <height>28</height>
+       <x>760</x>
+       <y>10</y>
+       <width>161</width>
+       <height>81</height>
       </rect>
      </property>
      <property name="text">
       <string>Scramble</string>
      </property>
     </widget>
+    <widget class="QLabel" name="beforeLabelDVB">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>200</y>
+       <width>171</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Before Scrambling</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="loadFileBtnDVB">
+     <property name="geometry">
+      <rect>
+       <x>460</x>
+       <y>20</y>
+       <width>161</width>
+       <height>61</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Load file</string>
+     </property>
+    </widget>
+    <widget class="QTextBrowser" name="textBrowserDVB">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>0</y>
+       <width>431</width>
+       <height>181</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="afterLabelDVB">
+     <property name="geometry">
+      <rect>
+       <x>520</x>
+       <y>200</y>
+       <width>171</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>After Scrambling</string>
+     </property>
+    </widget>
     <widget class="QPushButton" name="descrambleBtnDVB">
      <property name="geometry">
       <rect>
-       <x>250</x>
-       <y>170</y>
-       <width>93</width>
-       <height>28</height>
+       <x>760</x>
+       <y>100</y>
+       <width>161</width>
+       <height>81</height>
       </rect>
      </property>
      <property name="text">
       <string>Descramble</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="loadFileBtnDVB">
+    <widget class="QLabel" name="afterImgLabelDVB">
      <property name="geometry">
       <rect>
-       <x>140</x>
-       <y>90</y>
-       <width>93</width>
-       <height>28</height>
+       <x>520</x>
+       <y>240</y>
+       <width>431</width>
+       <height>321</height>
       </rect>
      </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
      <property name="text">
-      <string>Load file</string>
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="beforeImgLabelDVB">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>240</y>
+       <width>421</width>
+       <height>321</height>
+      </rect>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="text">
+      <string/>
      </property>
     </widget>
    </widget>
@@ -112,43 +190,121 @@
     <attribute name="title">
      <string>V34</string>
     </attribute>
-    <widget class="QPushButton" name="scrambleBtnV34">
-     <property name="geometry">
-      <rect>
-       <x>40</x>
-       <y>170</y>
-       <width>93</width>
-       <height>28</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Scramble</string>
-     </property>
-    </widget>
     <widget class="QPushButton" name="descrambleBtnV34">
      <property name="geometry">
       <rect>
-       <x>250</x>
-       <y>170</y>
-       <width>93</width>
-       <height>28</height>
+       <x>760</x>
+       <y>100</y>
+       <width>161</width>
+       <height>81</height>
       </rect>
      </property>
      <property name="text">
       <string>Descramble</string>
      </property>
     </widget>
+    <widget class="QLabel" name="beforeImgLabelV34">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>240</y>
+       <width>421</width>
+       <height>321</height>
+      </rect>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
     <widget class="QPushButton" name="loadFileBtnV34">
      <property name="geometry">
       <rect>
-       <x>140</x>
-       <y>90</y>
-       <width>93</width>
-       <height>28</height>
+       <x>460</x>
+       <y>20</y>
+       <width>161</width>
+       <height>61</height>
       </rect>
      </property>
      <property name="text">
       <string>Load file</string>
+     </property>
+    </widget>
+    <widget class="QTextBrowser" name="textBrowserV34">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>0</y>
+       <width>431</width>
+       <height>181</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="afterImgLabelV34">
+     <property name="geometry">
+      <rect>
+       <x>520</x>
+       <y>240</y>
+       <width>431</width>
+       <height>321</height>
+      </rect>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="afterLabelV34">
+     <property name="geometry">
+      <rect>
+       <x>520</x>
+       <y>200</y>
+       <width>171</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>After Scrambling</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="beforeLabelV34">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>200</y>
+       <width>171</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Before Scrambling</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="scrambleBtnV34">
+     <property name="geometry">
+      <rect>
+       <x>760</x>
+       <y>10</y>
+       <width>161</width>
+       <height>81</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Scramble</string>
      </property>
     </widget>
    </widget>
@@ -159,10 +315,10 @@
     <widget class="QPushButton" name="descrambleBtnAES">
      <property name="geometry">
       <rect>
-       <x>250</x>
-       <y>170</y>
-       <width>93</width>
-       <height>28</height>
+       <x>760</x>
+       <y>100</y>
+       <width>161</width>
+       <height>81</height>
       </rect>
      </property>
      <property name="text">
@@ -172,10 +328,10 @@
     <widget class="QPushButton" name="scrambleBtnAES">
      <property name="geometry">
       <rect>
-       <x>40</x>
-       <y>170</y>
-       <width>93</width>
-       <height>28</height>
+       <x>760</x>
+       <y>10</y>
+       <width>161</width>
+       <height>81</height>
       </rect>
      </property>
      <property name="text">
@@ -185,14 +341,92 @@
     <widget class="QPushButton" name="loadFileBtnAES">
      <property name="geometry">
       <rect>
-       <x>140</x>
-       <y>90</y>
-       <width>93</width>
-       <height>28</height>
+       <x>460</x>
+       <y>20</y>
+       <width>161</width>
+       <height>61</height>
       </rect>
      </property>
      <property name="text">
       <string>Load file</string>
+     </property>
+    </widget>
+    <widget class="QTextBrowser" name="textBrowserAES">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>0</y>
+       <width>431</width>
+       <height>181</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="beforeImgLabelAES">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>240</y>
+       <width>421</width>
+       <height>321</height>
+      </rect>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="beforeLabelAES">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>200</y>
+       <width>171</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Before Scrambling</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="afterImgLabelAES">
+     <property name="geometry">
+      <rect>
+       <x>520</x>
+       <y>240</y>
+       <width>431</width>
+       <height>321</height>
+      </rect>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="afterLabelAES">
+     <property name="geometry">
+      <rect>
+       <x>520</x>
+       <y>200</y>
+       <width>171</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>After Scrambling</string>
      </property>
     </widget>
    </widget>
