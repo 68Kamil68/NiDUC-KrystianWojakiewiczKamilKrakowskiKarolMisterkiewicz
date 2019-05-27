@@ -52,6 +52,151 @@
     <string>Descramble</string>
    </property>
   </widget>
+  <widget class="QTabWidget" name="tabWidget">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>411</width>
+     <height>301</height>
+    </rect>
+   </property>
+   <property name="currentIndex">
+    <number>2</number>
+   </property>
+   <widget class="QWidget" name="tabDVB">
+    <attribute name="title">
+     <string>DVB</string>
+    </attribute>
+    <widget class="QPushButton" name="scrambleBtnDVB">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>170</y>
+       <width>93</width>
+       <height>28</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Scramble</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="descrambleBtnDVB">
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>170</y>
+       <width>93</width>
+       <height>28</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Descramble</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="loadFileBtnDVB">
+     <property name="geometry">
+      <rect>
+       <x>140</x>
+       <y>90</y>
+       <width>93</width>
+       <height>28</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Load file</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="tabV34">
+    <attribute name="title">
+     <string>V34</string>
+    </attribute>
+    <widget class="QPushButton" name="scrambleBtnV34">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>170</y>
+       <width>93</width>
+       <height>28</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Scramble</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="descrambleBtnV34">
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>170</y>
+       <width>93</width>
+       <height>28</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Descramble</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="loadFileBtnV34">
+     <property name="geometry">
+      <rect>
+       <x>140</x>
+       <y>90</y>
+       <width>93</width>
+       <height>28</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Load file</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="tabAES">
+    <attribute name="title">
+     <string>AES</string>
+    </attribute>
+    <widget class="QPushButton" name="descrambleBtnAES">
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>170</y>
+       <width>93</width>
+       <height>28</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Descramble</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="scrambleBtnAES">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>170</y>
+       <width>93</width>
+       <height>28</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Scramble</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="loadFileBtnAES">
+     <property name="geometry">
+      <rect>
+       <x>140</x>
+       <y>90</y>
+       <width>93</width>
+       <height>28</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Load file</string>
+     </property>
+    </widget>
+   </widget>
+  </widget>
  </widget>
  <resources/>
  <connections/>

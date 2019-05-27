@@ -11,7 +11,7 @@ def xor(a, b):
     else:
         return 1
 
-class Scrambler:
+class ScramblerDVB:
     def __init__(self, size_of_bitmap, raw_binary):
         self.sync = []
         self.scrambler_output = []
