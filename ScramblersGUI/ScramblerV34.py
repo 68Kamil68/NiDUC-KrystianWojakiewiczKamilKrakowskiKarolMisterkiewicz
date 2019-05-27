@@ -2,11 +2,13 @@ import random
 
 
 class ScramblerV34:
-    def __init__(label):
+    def __init__(self, size_of_bitmap, raw_binary, label):
         self.sync = []
         self.scrambler_output = []
         self.descrambler_output = []
         self.first_sync = []
+        self.raw_binary = raw_binary
+        self.size_of_bitmap = size_of_bitmap
         self.SYNC_LENGTH = 23
 
         self.initialize_scrambler(label)
@@ -19,18 +21,19 @@ class ScramblerV34:
         else:
             return 1
 
+
     # fill the scrambler and print SYNC in GUI
     def initialize_scrambler(self, label):
-        self.fill_sync(self.sync, self.first_sync)
+        self.fill_sync()
         self.showInitialSeqInGUI(label)
 
 
     # creating the first 23 pseudo-random bit seq (SYNC)
-    def fill_sync(self, tab, tab2):
+    def fill_sync(self):
         for i in range(self.SYNC_LENGTH):
             newRandom = random.randint(0, 1)
-            tab.append(newRandom)
-            tab2.append(newRandom)
+            self.sync.append(newRandom)
+            self.first_sync.append(newRandom)
 
 
     def showInitialSeqInGUI(self, label):
@@ -39,10 +42,10 @@ class ScramblerV34:
 
 
     # Scrambling function
-    def scrambling(self, tab):
-        for i in range(len(tab)):
-            temp = len(sync)
-            tempo = xor(xor(sync[17], sync[22]), tab[i])
+    def scramble(self):
+        for i in range(len(self.raw_binary)):
+            temp = len(self.sync)
+            tempo = self.xor(self.xor(self.sync[17], self.sync[22]), self.raw_binary[i])
             self.scrambler_output.append(tempo)
             while temp > 1:
                 self.sync[temp-1] = self.sync[temp-2]
@@ -52,32 +55,12 @@ class ScramblerV34:
 
 
     # Descrambling function
-    def descrambling(self, tab):
-        for i in range(len(tab)):
+    def descramble(self):
+        for i in range(len(self.scrambler_output)):
             temp = len(self.first_sync)
-            self.descrambler_output.append(xor(xor(self.first_sync[17], self.first_sync[22]), tab[i]))
+            self.descrambler_output.append(self.xor(self.xor(self.first_sync[17], self.first_sync[22]), self.scrambler_output[i]))
             while temp > 1:
                 self.first_sync[temp-1] = self.first_sync[temp-2]
                 temp -= 1
             self.first_sync[0] = self.scrambler_output[i]
         return self.descrambler_output
-
-
-
-
-
-
-    #Pobranie słowa z pliku
-    raw_binary = open('bintext.txt', 'r').read()
-    print("Przed scramblingiem: " + raw_binary)
-
-    #wykonanie scramblingu i wpisanie efektow
-    scrambling(raw_binary)
-    informal_scrambled = [str(i) for i in scrambler_output]
-    print('Po scramblingu:      ' + ''.join(informal_scrambled))
-
-
-    #wykonanie descramblingu i wpisanie efektow
-    descrambling(scrambler_output)
-    informal_descrambled = [str(i) for i in descrambler_output]
-    print('Po descramblingu:    ' + ''.join(informal_descrambled))

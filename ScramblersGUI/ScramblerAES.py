@@ -25,8 +25,7 @@ class ScramblerAES:
     def encrypt(self, image):
         image = self._pad(image)
         encryptedMessage = self.cipher.encrypt(image)
-        #return base64.b64encode(self.IV + encryptedMessage)
-        return encryptedMessage
+        return base64.b64encode(self.IV + encryptedMessage)
 
 
     #decrypt input image
