@@ -2,7 +2,7 @@ import random
 
 
 class ScramblerV34:
-    def __init__(self, size_of_bitmap, raw_binary, label):
+    def __init__(self, size_of_bitmap, raw_binary, textBrowserV34):
         self.sync = []
         self.scrambler_output = []
         self.descrambler_output = []
@@ -11,7 +11,7 @@ class ScramblerV34:
         self.size_of_bitmap = size_of_bitmap
         self.SYNC_LENGTH = 23
 
-        self.initialize_scrambler(label)
+        self.initialize_scrambler(textBrowserV34)
 
 
     #Definicja sumy XOR
@@ -23,9 +23,9 @@ class ScramblerV34:
 
 
     # fill the scrambler and print SYNC in GUI
-    def initialize_scrambler(self, label):
+    def initialize_scrambler(self, textBrowserV34):
         self.fill_sync()
-        self.showInitialSeqInGUI(label)
+        self.showInitialSeqInGUI(textBrowserV34)
 
 
     # creating the first 23 pseudo-random bit seq (SYNC)
@@ -36,9 +36,9 @@ class ScramblerV34:
             self.first_sync.append(newRandom)
 
 
-    def showInitialSeqInGUI(self, label):
+    def showInitialSeqInGUI(self, textBrowserV34):
         informal_sync = [str(i) for i in self.sync]
-        label.append('\nInitial pseudo-random seq SYNC:    ' + ''.join(informal_sync))
+        textBrowserV34.append('\nInitial pseudo-random seq SYNC:    ' + ''.join(informal_sync))
 
 
     # Scrambling function
@@ -55,12 +55,12 @@ class ScramblerV34:
 
 
     # Descrambling function
-    def descramble(self):
-        for i in range(len(self.scrambler_output)):
+    def descramble(self, noisedScramblerOutput):
+        for i in range(len(noisedScramblerOutput)):
             temp = len(self.first_sync)
-            self.descrambler_output.append(self.xor(self.xor(self.first_sync[17], self.first_sync[22]), self.scrambler_output[i]))
+            self.descrambler_output.append(self.xor(self.xor(self.first_sync[17], self.first_sync[22]), noisedScramblerOutput[i]))
             while temp > 1:
                 self.first_sync[temp-1] = self.first_sync[temp-2]
                 temp -= 1
-            self.first_sync[0] = self.scrambler_output[i]
+            self.first_sync[0] = noisedScramblerOutput[i]
         return self.descrambler_output

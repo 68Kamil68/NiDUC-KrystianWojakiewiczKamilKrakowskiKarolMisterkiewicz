@@ -1,7 +1,7 @@
 # This Python file uses the following encoding: utf-8
 from PyQt5 import QtWidgets
 import random
-# from bitmap import BitMap
+
 from PIL import Image
 
 # definicja sumy xor
@@ -12,7 +12,7 @@ def xor(a, b):
         return 1
 
 class ScramblerDVB:
-    def __init__(self, size_of_bitmap, raw_binary, label):
+    def __init__(self, size_of_bitmap, raw_binary, textBrowserDVB):
         self.sync = []
         self.scrambler_output = []
         self.descrambler_output = []
@@ -21,13 +21,13 @@ class ScramblerDVB:
         self.size_of_bitmap = size_of_bitmap
         self.SYNC_LENGTH = 15
 
-        self.initialize_scrambler(label)
+        self.initialize_scrambler(textBrowserDVB)
 
 
     # wypełnienie scramblera i wypisanie poczatkowych liczb pseudolosowych
-    def initialize_scrambler(self, label):
+    def initialize_scrambler(self, textBrowserDVB):
         self.fill_sync()
-        self.showInitialSeqInGUI(label)
+        self.showInitialSeqInGUI(textBrowserDVB)
 
     # Tworzenie sync/poczatkowe 15 pseudolosowych bitow w scramblerze
     def fill_sync(self):
@@ -37,9 +37,9 @@ class ScramblerDVB:
             self.first_sync.append(newRandom)
 
     # shows the first pseudo-random number seq
-    def showInitialSeqInGUI(self, label):
+    def showInitialSeqInGUI(self, textBrowserDVB):
         informal_sync = [str(i) for i in self.sync]
-        label.append('\nInitial pseudo-random seq SYNC:    ' + ''.join(informal_sync))
+        textBrowserDVB.append('\nInitial pseudo-random seq SYNC:    ' + ''.join(informal_sync))
 
 
     # funkcja scramblujaca
@@ -55,12 +55,13 @@ class ScramblerDVB:
 
 
     # funkcja descramblujaca
-    def descramble(self):
-        for i in range(len(self.scrambler_output)):
+    def descramble(self, noisedScramblerOutput):
+        for i in range(len(noisedScramblerOutput)):
             temp = len(self.first_sync)
-            self.descrambler_output.append(xor(xor(self.first_sync[13], self.first_sync[14]), self.scrambler_output[i]))
+            self.descrambler_output.append(xor(xor(self.first_sync[13], self.first_sync[14]), noisedScramblerOutput[i]))
             while temp > 1:
                 self.first_sync[temp-1] = self.first_sync[temp-2]
                 temp -= 1
             self.first_sync[0] = xor(self.first_sync[13], self.first_sync[14])
         return self.descrambler_output
+

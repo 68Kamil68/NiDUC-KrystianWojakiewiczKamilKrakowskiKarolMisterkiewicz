@@ -4,6 +4,8 @@ import os
 from PySide2.QtWidgets import QApplication, QMainWindow
 from PyQt5 import uic, QtWidgets, QtCore, QtGui
 
+import random
+import numpy
 
 import tkinter as tk
 from tkinter.filedialog import askopenfilename
@@ -47,17 +49,25 @@ class MainWindow(QtWidgets.QDialog):
         self.raw_binary = []
         self.img = 0
 
+        self.probRatio = 3
+
         self.scramblerDVB = 0
         self.output_imageDVB = 0
+        self.noisedImageDVB = 0
 
         self.AES = 0
-        self.output_imageDVB = 0
+        self.output_imageAES = 0
+        self.noisedImageAES = 0
 
         self.scramblerV34 = 0
         self.output_imageV34 = 0
+        self.noisedImageV34 = 0
+
+        self.output_imageNoise = 0
 
 
 
+    # scramble V34 button event handler
     def scrambleV34ButtonClicked(self):
         if self.size_of_bitmap == 0:    # return if no image found
             return
@@ -65,21 +75,24 @@ class MainWindow(QtWidgets.QDialog):
         self.scramblerV34 = ScramblerV34(self.size_of_bitmap, self.raw_binary, self.textBrowserV34)
 
         scrambledImage = self.scramblerV34.scramble()
+        self.noisedImageV34 = self.addNoise(scrambledImage)
 
         self.output_imageV34 = Image.new('1', (self.size_of_bitmap, self.size_of_bitmap))
         pixels = self.output_imageV34.load()
         for i in range(self.output_imageV34.size[0]):    # For every pixel:
             for j in range(self.output_imageV34.size[1]):
-                pixels[i, j] = scrambledImage[(self.size_of_bitmap * i) + j]
+                pixels[i, j] = self.noisedImageV34[(self.size_of_bitmap * i) + j]
+
 
         self.showResultInGUI(self.afterImgLabelV34, self.output_imageV34)
 
 
+    # descramble V34 button event handler
     def descrambleV34ButtonClicked(self):
         if self.scramblerV34 == 0:   # return if scrambling hasn't been done
             return
 
-        descrambledImage = self.scramblerV34.descramble()
+        descrambledImage = self.scramblerV34.descramble(self.noisedImageV34)
         self.output_imageV34 = Image.new('1', (self.size_of_bitmap, self.size_of_bitmap))
         pixels = self.output_imageV34.load()
 
@@ -90,12 +103,15 @@ class MainWindow(QtWidgets.QDialog):
         self.showResultInGUI(self.afterImgLabelV34, self.output_imageV34)
 
 
-    #scramble AES button event handler
+    # scramble AES button event handler
     def scrambleAESButtonClicked(self):
-        self.AES = ScramblerAES()
+        if self.size_of_bitmap == 0:
+            return
 
-        encryptedImage = self.AES.encrypt( str(self.img) )
-        self.textBrowserAES.append(str(encryptedImage))
+        self.AES = ScramblerAES(self.size_of_bitmap, self.raw_binary, self.textBrowserDVB)
+
+        encryptedImageString = self.AES.encrypt()
+        encryptedImageArray = numpy.asarray(encryptedImageString)
 
         self.output_imageAES = Image.new('1', (self.size_of_bitmap, self.size_of_bitmap))
         pixels = self.output_imageAES.load()
@@ -103,6 +119,7 @@ class MainWindow(QtWidgets.QDialog):
             for j in range(self.output_imageAES.size[1]):
                 pixels[i, j] = encryptedImage[(self.size_of_bitmap * i) + j]
 
+        self.showResultInGUI(self.afterImgLabelAES, self.output_imageAES)
 
     # descramble AES button event handler
     def descrambleAESButtonClicked(self):
@@ -117,12 +134,13 @@ class MainWindow(QtWidgets.QDialog):
 
         self.scramblerDVB = ScramblerDVB(self.size_of_bitmap, self.raw_binary, self.textBrowserDVB)
         scrambledImage = self.scramblerDVB.scramble()
+        self.noisedImageDVB = self.addNoise(scrambledImage)
 
         self.output_imageDVB = Image.new('1', (self.size_of_bitmap, self.size_of_bitmap))
         pixels = self.output_imageDVB.load()
         for i in range(self.output_imageDVB.size[0]):    # For every pixel:
             for j in range(self.output_imageDVB.size[1]):
-                pixels[i, j] = scrambledImage[(self.size_of_bitmap * i) + j]
+                pixels[i, j] = self.noisedImageDVB[(self.size_of_bitmap * i) + j]
 
         self.showResultInGUI(self.afterImgLabelDVB, self.output_imageDVB)
 
@@ -132,7 +150,7 @@ class MainWindow(QtWidgets.QDialog):
         if self.scramblerDVB == 0:  #catch if no image to descramble
             return
 
-        descrambledImage = self.scramblerDVB.descramble()
+        descrambledImage = self.scramblerDVB.descramble(self.noisedImageDVB)
         self.output_imageDVB = Image.new('1', (self.size_of_bitmap, self.size_of_bitmap))
         pixels = self.output_imageDVB.load()
 
@@ -185,10 +203,45 @@ class MainWindow(QtWidgets.QDialog):
             for j in range(self.img.size[1]):
                 self.raw_binary.append(pixels[i, j])
 
+        noisedImage = self.addNoise(self.raw_binary)
+
+        self.output_imageNoise = Image.new('1', (self.size_of_bitmap, self.size_of_bitmap))
+        pixels = self.output_imageNoise.load()
+
+        for i in range(self.output_imageNoise.size[0]):    # For every pixel:
+            for j in range(self.output_imageNoise.size[1]):
+                pixels[i, j] = noisedImage[(self.size_of_bitmap * i) + j]
+
+        self.showResultInGUI(self.beforeImgLabelAES, self.output_imageNoise)
+        self.showResultInGUI(self.beforeImgLabelDVB, self.output_imageNoise)
+        self.showResultInGUI(self.beforeImgLabelV34, self.output_imageNoise)
+
+        '''
         self.showImageInGUI(self.beforeImgLabelAES, self.input_bnp)
         self.showImageInGUI(self.beforeImgLabelDVB, self.input_bnp)
         self.showImageInGUI(self.beforeImgLabelV34, self.input_bnp)
+        '''
 
+
+    def addNoise(self, rawImage):
+        zeroCounter = 0
+        oneCounter = 0
+        noisedImage = []
+        for i in range( len(rawImage) ):
+            if rawImage[i] == 0:
+                zeroCounter += 1
+                oneCounter = 0
+            elif self.raw_binary[i] == 1:
+                oneCounter += 1
+                zeroCounter = 0
+
+            noiseProb = (zeroCounter + oneCounter) / self.probRatio
+            newRandom = random.randint(0, 100)
+            if newRandom < noiseProb:
+                noisedImage.append(~rawImage[i])
+            else:
+                noisedImage.append(rawImage[i])
+        return noisedImage
 
 
 
