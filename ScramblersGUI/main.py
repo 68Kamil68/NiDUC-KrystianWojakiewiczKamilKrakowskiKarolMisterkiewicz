@@ -40,7 +40,7 @@ class MainWindow(QtWidgets.QDialog):
         #setting up AES event handlers
         self.loadFileBtnAES.clicked.connect(self.loadButtonClicked)
         self.scrambleBtnAES.clicked.connect(self.scrambleAESButtonClicked)
-        #self.descrambleBtnAES.clicked.connect(self.descrambleAESButtonClicked)
+        self.descrambleBtnAES.clicked.connect(self.descrambleAESButtonClicked)
 
         self.show()
 
@@ -48,8 +48,6 @@ class MainWindow(QtWidgets.QDialog):
         self.size_of_bitmap = 0
         self.raw_binary = []
         self.img = 0
-
-        self.probRatio = 3
 
         self.scramblerDVB = 0
         self.output_imageDVB = 0
@@ -64,7 +62,8 @@ class MainWindow(QtWidgets.QDialog):
         self.noisedImageV34 = 0
 
         self.output_imageNoise = 0
-
+        self.noisedImage_raw = []
+        self.diffImage = 0
 
 
     # scramble V34 button event handler
@@ -75,7 +74,7 @@ class MainWindow(QtWidgets.QDialog):
         self.scramblerV34 = ScramblerV34(self.size_of_bitmap, self.raw_binary, self.textBrowserV34)
 
         scrambledImage = self.scramblerV34.scramble()
-        self.noisedImageV34 = self.addNoise(scrambledImage)
+        self.noisedImageV34 = self.addNoise(scrambledImage, int(self.comboBoxV34.currentText() ))
 
         self.output_imageV34 = Image.new('1', (self.size_of_bitmap, self.size_of_bitmap))
         pixels = self.output_imageV34.load()
@@ -107,24 +106,43 @@ class MainWindow(QtWidgets.QDialog):
     def scrambleAESButtonClicked(self):
         if self.size_of_bitmap == 0:
             return
+        self.AES = ScramblerAES(self.size_of_bitmap, self.raw_binary, self.textBrowserAES)
+        #self.textBrowserAES.append( str(self.AES.encryptText()) )
+        self.textBrowserAES.append( str(self.raw_binary) )
+        #self.textBrowserAES.append( str(self.AES.encrypt()) )
+        #self.textBrowserAES.append( str(self.AES.decrypt()) )
 
-        self.AES = ScramblerAES(self.size_of_bitmap, self.raw_binary, self.textBrowserDVB)
 
-        encryptedImageString = self.AES.encrypt()
-        encryptedImageArray = numpy.asarray(encryptedImageString)
+        encryptedImage = self.AES.encrypt()
+        self.textBrowserAES.append(str(encryptedImage))
 
-        self.output_imageAES = Image.new('1', (self.size_of_bitmap, self.size_of_bitmap))
-        pixels = self.output_imageAES.load()
-        for i in range(self.output_imageAES.size[0]):    # For every pixel:
-            for j in range(self.output_imageAES.size[1]):
-                pixels[i, j] = encryptedImage[(self.size_of_bitmap * i) + j]
+        self.showResultInGUI(self.afterImgLabelAES, encryptedImage)
 
-        self.showResultInGUI(self.afterImgLabelAES, self.output_imageAES)
 
     # descramble AES button event handler
     def descrambleAESButtonClicked(self):
         if self.AES == 0:   # return if scrambling hasn't been done
             return
+        myImage = []
+
+        decryptedImage = self.AES.decrypt()
+        for i in range(len(decryptedImage)):
+            #self.textBrowserAES.append(str(decryptedImage[4] + "i: " + str(i)))
+            try:
+                if int(decryptedImage[i]) == 1 or int(decryptedImage[i]) == 0:
+                    myImage.append(decryptedImage[i])
+                    self.textBrowserAES.append("sdsfdfsfeffewfefwefwefweffewf")
+            except ValueError:
+                print("not an int!!")
+
+        self.output_imageAES = Image.new('1', (self.size_of_bitmap, self.size_of_bitmap))
+        pixels = self.output_imageAES.load()
+
+        for i in range(self.output_imageAES.size[0]):    # For every pixel:
+            for j in range(self.output_imageAES.size[1]):
+                pixels[i, j] = myImage[(self.size_of_bitmap * i) + j]
+
+        #self.showResultInGUI(self.afterImgLabelAES, self.output_imageAES)
 
 
     #scramble DVB button event handler
@@ -134,8 +152,9 @@ class MainWindow(QtWidgets.QDialog):
 
         self.scramblerDVB = ScramblerDVB(self.size_of_bitmap, self.raw_binary, self.textBrowserDVB)
         scrambledImage = self.scramblerDVB.scramble()
-        self.noisedImageDVB = self.addNoise(scrambledImage)
+        self.noisedImageDVB = self.addNoise(scrambledImage, int(self.comboBoxDVB.currentText() ))
 
+        self.textBrowserDVB.append( str(self.noisedImageDVB) )
         self.output_imageDVB = Image.new('1', (self.size_of_bitmap, self.size_of_bitmap))
         pixels = self.output_imageDVB.load()
         for i in range(self.output_imageDVB.size[0]):    # For every pixel:
@@ -159,6 +178,24 @@ class MainWindow(QtWidgets.QDialog):
                 pixels[i, j] = descrambledImage[(self.size_of_bitmap * i) + j]
 
         self.showResultInGUI(self.afterImgLabelDVB, self.output_imageDVB)
+
+        self.setupDiffImage(self.scramblerDVB)
+        self.showResultInGUI(self.diffLabelDVB, self.diffImage)
+
+
+    # calculating  image difference
+    def setupDiffImage(self, scrambler):
+        output_diff = []
+        for i in range(len(self.noisedImage_raw)):
+            newPixel = scrambler.descrambler_output[i] ^ self.raw_binary[i]
+            output_diff.append(newPixel)
+
+        self.diffImage = Image.new('1', (self.size_of_bitmap, self.size_of_bitmap))
+        pixels = self.diffImage.load()
+
+        for i in range(self.diffImage.size[0]):    # For every pixel:
+            for j in range(self.diffImage.size[1]):
+                pixels[i, j] = output_diff[(self.size_of_bitmap * i) + j]
 
 
     #load button event handler
@@ -203,14 +240,22 @@ class MainWindow(QtWidgets.QDialog):
             for j in range(self.img.size[1]):
                 self.raw_binary.append(pixels[i, j])
 
-        noisedImage = self.addNoise(self.raw_binary)
+        # setting noise strength to the value of current tab's value
+        if self.tabWidget.currentIndex() == 0:
+            noiseStrength = int(self.comboBoxDVB.currentText())
+        elif self.tabWidget.currentIndex() == 1:
+            noiseStrength = int(self.comboBoxV34.currentText())
+        elif self.tabWidget.currentIndex() == 2:
+            noiseStrength = int(self.comboBoxAES.currentText())
+
+        self.noisedImage_raw = self.addNoise(self.raw_binary, noiseStrength)
 
         self.output_imageNoise = Image.new('1', (self.size_of_bitmap, self.size_of_bitmap))
         pixels = self.output_imageNoise.load()
 
         for i in range(self.output_imageNoise.size[0]):    # For every pixel:
             for j in range(self.output_imageNoise.size[1]):
-                pixels[i, j] = noisedImage[(self.size_of_bitmap * i) + j]
+                pixels[i, j] = self.noisedImage_raw[(self.size_of_bitmap * i) + j]
 
         self.showResultInGUI(self.beforeImgLabelAES, self.output_imageNoise)
         self.showResultInGUI(self.beforeImgLabelDVB, self.output_imageNoise)
@@ -223,7 +268,7 @@ class MainWindow(QtWidgets.QDialog):
         '''
 
 
-    def addNoise(self, rawImage):
+    def addNoise(self, rawImage, noiseRatio):
         zeroCounter = 0
         oneCounter = 0
         noisedImage = []
@@ -235,7 +280,7 @@ class MainWindow(QtWidgets.QDialog):
                 oneCounter += 1
                 zeroCounter = 0
 
-            noiseProb = (zeroCounter + oneCounter) / self.probRatio
+            noiseProb = (zeroCounter + oneCounter) / noiseRatio
             newRandom = random.randint(0, 100)
             if newRandom < noiseProb:
                 noisedImage.append(~rawImage[i])
