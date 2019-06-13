@@ -50,7 +50,7 @@ class ScramblerAES:
         a = self.encryptedCipher = cipher.encrypt(str(paddedImage).encode())
 
 
-        self.outputImage = Image.frombytes('RGB', (self.size_of_bitmap, self.size_of_bitmap), self.encryptedCipher)
+        self.outputImage = Image.frombytes('1', (self.size_of_bitmap, self.size_of_bitmap), self.encryptedCipher)
         return self.outputImage
 
 

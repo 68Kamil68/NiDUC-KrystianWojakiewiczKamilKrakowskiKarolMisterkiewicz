@@ -160,7 +160,9 @@ class MainWindow(QtWidgets.QDialog):
         for i in range(self.output_imageDVB.size[0]):    # For every pixel:
             for j in range(self.output_imageDVB.size[1]):
                 pixels[i, j] = self.noisedImageDVB[(self.size_of_bitmap * i) + j]
+                #pixels[i, j] = scrambledImage[(self.size_of_bitmap * i) + j]
 
+        self.showResultInGUI(self.afterImgLabelDVB, self.output_imageDVB)
         self.showResultInGUI(self.afterImgLabelDVB, self.output_imageDVB)
 
 
@@ -234,6 +236,11 @@ class MainWindow(QtWidgets.QDialog):
         self.raw_binary.clear()     # clearing raw_binary in case it wasn't empty
 
         self.img = Image.open(self.input_bnp)
+
+        thresh = 200
+        fn = lambda x : 1 if x > thresh else 0
+        self.img = self.img.convert('L').point(fn, mode='1')
+
         self.size_of_bitmap = self.img.size[0]
         pixels = self.img.load()
         for i in range(self.img.size[0]):
@@ -250,22 +257,23 @@ class MainWindow(QtWidgets.QDialog):
 
         self.noisedImage_raw = self.addNoise(self.raw_binary, noiseStrength)
 
-        self.output_imageNoise = Image.new('1', (self.size_of_bitmap, self.size_of_bitmap))
+        self.output_imageNoise = Image.new('1', (self.img.size[0], self.img.size[1]))
         pixels = self.output_imageNoise.load()
 
         for i in range(self.output_imageNoise.size[0]):    # For every pixel:
             for j in range(self.output_imageNoise.size[1]):
                 pixels[i, j] = self.noisedImage_raw[(self.size_of_bitmap * i) + j]
+                #print("i: " + str(i) + "j: " + str(j))
 
         self.showResultInGUI(self.beforeImgLabelAES, self.output_imageNoise)
         self.showResultInGUI(self.beforeImgLabelDVB, self.output_imageNoise)
         self.showResultInGUI(self.beforeImgLabelV34, self.output_imageNoise)
 
-        '''
-        self.showImageInGUI(self.beforeImgLabelAES, self.input_bnp)
-        self.showImageInGUI(self.beforeImgLabelDVB, self.input_bnp)
-        self.showImageInGUI(self.beforeImgLabelV34, self.input_bnp)
-        '''
+
+       # self.showImageInGUI(self.beforeImgLabelAES, self.input_bnp)
+       # self.showImageInGUI(self.beforeImgLabelDVB, self.input_bnp)
+       # self.showImageInGUI(self.beforeImgLabelV34, self.input_bnp)
+
 
 
     def addNoise(self, rawImage, noiseRatio):
@@ -276,17 +284,19 @@ class MainWindow(QtWidgets.QDialog):
             if rawImage[i] == 0:
                 zeroCounter += 1
                 oneCounter = 0
-            elif self.raw_binary[i] == 1:
+            elif rawImage[i] == 1:
                 oneCounter += 1
                 zeroCounter = 0
 
             noiseProb = (zeroCounter + oneCounter) / noiseRatio
             newRandom = random.randint(0, 100)
             if newRandom < noiseProb:
-                noisedImage.append(~rawImage[i])
+                noisedImage.append(1^rawImage[i])   # swap the bit
             else:
                 noisedImage.append(rawImage[i])
+
         return noisedImage
+
 
 
 
@@ -301,5 +311,5 @@ if __name__ == "__main__":
 ######################################
 
 
-
+# WHITE DOTS = DIFF IN IMAGES
 
