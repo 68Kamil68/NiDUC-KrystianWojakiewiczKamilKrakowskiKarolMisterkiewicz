@@ -28,45 +28,32 @@ class ScramblerAES:
         self.key = hashlib.sha256(key.encode()).digest()        # we hash the key to make it more secure (more random)
         self.IV = Random.new().read(16)                         #
 
-    # encrypt input text
-    def encryptText(self):
-        cipher = AES.new(self.key, AES.MODE_CBC, self.IV)  # creating AESCipher object for AES
-        plaintext = "HELLO WORLD!"
-        paddedText = self.pad(str(plaintext))
-        encryptedText = cipher.encrypt(paddedText.encode())
-        cipher = AES.new(self.key, AES.MODE_CBC, self.IV)  # creating AESCipher object for AES
-
-        self.plaintext = cipher.decrypt(encryptedText)
-        return self.unpad(self.plaintext)
-
 
     # encrypt input image
     def encrypt(self):
-        cipher = AES.new(self.key, AES.MODE_CBC, self.IV)  # creating AESCipher object for AES
+        cipher = AES.new(self.key, AES.MODE_CFB, self.IV)  # creating AESCipher object for AES
         imageString = [str(i) for i in self.raw_binary]
-        a = [int(i) for i in imageString]
-        paddedImage = self.pad(self.raw_binary)
 
-        a = self.encryptedCipher = cipher.encrypt(str(paddedImage).encode())
+        a = ""
+        for i in range(len(self.raw_binary)):
+            a += str(self.raw_binary[i])
 
-
+        self.encryptedCipher = cipher.encrypt(str(a).encode())
         self.outputImage = Image.frombytes('1', (self.size_of_bitmap, self.size_of_bitmap), self.encryptedCipher)
         return self.outputImage
 
 
     #decrypt input image
     def decrypt(self):
-        cipher = AES.new(self.key, AES.MODE_CBC, self.IV)                   # creating AESCipher object for AES
+        cipher = AES.new(self.key, AES.MODE_CFB, self.IV)                   # creating AESCipher object for AES
 
         decryptedImage = cipher.decrypt(self.encryptedCipher)
-        a = decryptedImage.decode()
-        unpaddedImage = self.unpad(a)
-        imageString = [str(i) for i in unpaddedImage]
 
-        self.outputImage = Image.frombytes('1', (self.size_of_bitmap, self.size_of_bitmap), str(imageString).encode())
-
-        return unpaddedImage
-
+        b = []
+        for i in range(len(decryptedString)):
+              b.append(int(decryptedString[i]))
+        print(b)
+        return b
 
 
     def pad(self, s):
