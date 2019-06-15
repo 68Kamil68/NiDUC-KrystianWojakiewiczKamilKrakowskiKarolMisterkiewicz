@@ -88,6 +88,7 @@ class MainWindow(QtWidgets.QDialog):
         self.showResultInGUI(self.afterImgLabelV34, self.output_imageV34)
 
 
+
     # descramble V34 button event handler
     def descrambleV34ButtonClicked(self):
         if self.scramblerV34 == 0:   # return if scrambling hasn't been done
@@ -108,26 +109,19 @@ class MainWindow(QtWidgets.QDialog):
         self.showResultInGUI(self.diffLabelV34, self.diffImage)
 
 
+
     # scramble AES button event handler
     def scrambleAESButtonClicked(self):
         if self.size_of_bitmap == 0:
             return
-        self.AES = ScramblerAES(self.size_of_bitmap, self.raw_binary, self.textBrowserAES)
-        self.textBrowserAES.append( str(self.AES.key ))
 
+        self.AES = ScramblerAES(self.size_of_bitmap, self.raw_binary, self.textBrowserAES)
+        self.textBrowserAES.append( str(self.AES.key) )
 
         encryptedImage = self.AES.encrypt()
-        self
-        self.noisedImageAES_raw = self.addNoise(self.AES.enc, int(self.comboBoxAES.currentText() ))
 
-        self.noisedImageAES = Image.new('1', (self.size_of_bitmap, self.size_of_bitmap))
-        pixels = self.noisedImageAES.load()
-        '''
-        for i in range(self.noisedImageAES.size[0]):    # For every pixel:
-            for j in range(self.noisedImageAES.size[1]):
-                pixels[i, j] = self.noisedImageAES_raw[(self.size_of_bitmap * i) + j]
-        '''
         self.showResultInGUI(self.afterImgLabelAES, encryptedImage)
+
 
 
     # descramble AES button event handler
@@ -140,11 +134,12 @@ class MainWindow(QtWidgets.QDialog):
         self.output_imageAES = Image.new('1', (self.size_of_bitmap, self.size_of_bitmap))
         pixels = self.output_imageAES.load()
 
-        for i in range(self.output_imageAES.size[0]):    # For every pixel:
+        for i in range(self.output_imageAES.size[0]):   # For every pixel:
             for j in range(self.output_imageAES.size[1]):
                 pixels[i, j] = decryptedImage[(self.size_of_bitmap * i) + j]
 
         self.showResultInGUI(self.afterImgLabelAES, self.output_imageAES)
+
 
 
     #scramble DVB button event handler
@@ -168,6 +163,7 @@ class MainWindow(QtWidgets.QDialog):
         self.showResultInGUI(self.afterImgLabelDVB, self.output_imageDVB)
 
 
+
     #descramble DVB button event handler
     def descrambleDVBButtonClicked(self):
         if self.scramblerDVB == 0:  #catch if no image to descramble
@@ -187,6 +183,7 @@ class MainWindow(QtWidgets.QDialog):
         self.showResultInGUI(self.diffLabelDVB, self.diffImage)
 
 
+
     # calculating  image difference
     def setupDiffImage(self, scrambler):
         output_diff = []
@@ -202,10 +199,12 @@ class MainWindow(QtWidgets.QDialog):
                 pixels[i, j] = output_diff[(self.size_of_bitmap * i) + j]
 
 
+
     #load button event handler
     def loadButtonClicked(self):
         self.showLoadDialog()
         self.loadImage()
+
 
 
     #shows menu for choosing .bnp file
@@ -215,11 +214,13 @@ class MainWindow(QtWidgets.QDialog):
         self.input_bnp = askopenfilename()
 
 
+
     # shows an image in the chosen label
     def showImageInGUI(self, label, imagePath):
         myPixmap = QtGui.QPixmap( imagePath )
         myScaledPixmap = myPixmap.scaled(label.size(), QtCore.Qt.KeepAspectRatio)
         label.setPixmap(myScaledPixmap)
+
 
 
     def showResultInGUI(self, label, image):
@@ -228,6 +229,7 @@ class MainWindow(QtWidgets.QDialog):
 
         myScaledPixmap = myPixmap.scaled(label.size(), QtCore.Qt.KeepAspectRatio)
         label.setPixmap(myScaledPixmap)
+
 
 
     # reading bitmap from file and writing pixel data into an array
@@ -272,11 +274,6 @@ class MainWindow(QtWidgets.QDialog):
         self.showResultInGUI(self.beforeImgLabelV34, self.output_imageNoise)
 
 
-       # self.showImageInGUI(self.beforeImgLabelAES, self.input_bnp)
-       # self.showImageInGUI(self.beforeImgLabelDVB, self.input_bnp)
-       # self.showImageInGUI(self.beforeImgLabelV34, self.input_bnp)
-
-
 
     def addNoise(self, rawImage, noiseRatio):
         zeroCounter = 0
@@ -298,6 +295,8 @@ class MainWindow(QtWidgets.QDialog):
                 noisedImage.append(rawImage[i])
 
         return noisedImage
+
+
 
 
 
